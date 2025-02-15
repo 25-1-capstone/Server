@@ -1,0 +1,32 @@
+{
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "entryFile": "src/app.ts",
+  "controllerPathGlobs": ["src/controllers/*.controller.ts"],
+  "spec": {
+    "outputDirectory": "./swagger",
+    "specVersion": 3,
+    "validate": true,
+    "spec": {
+      "servers": [
+        {
+          "url": "http://localhost:3000",
+          "description": "local server"
+        }
+      ]
+    },
+    "securityDefinitions": {
+      "sessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid"
+      }
+    },
+    "security": [{"sessionAuth": []}]
+  },
+  "routes": {
+    "routesDir": "./src/routers",
+    "middleware": "express",
+    "routesFileName": "tsoaRoutes.ts",
+    "esm": true
+  }
+}

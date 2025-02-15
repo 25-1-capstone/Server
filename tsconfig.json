@@ -1,0 +1,24 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "moduleResolution": "Nodenext",
+    "module": "Nodenext",
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {},
+    "typeRoots": ["./@types", ".node_modules/@types"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "scripts/**/*.ts",
+    "@types/**/*.d.ts",
+    "swagger/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
+}

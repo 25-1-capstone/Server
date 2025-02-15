@@ -1,0 +1,34 @@
+name: PR test
+
+on:
+  pull_request: # Pull Request 생성 또는 업데이트 시 트리거
+    branches:
+      - develop # develop 브랜치로의 PR에 대해서만 트리거
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: yarn install
+
+      # Prisma Client 생성 검사
+      - name: Test prisma generate
+        run: yarn prisma generate
+
+      # 프로젝트 빌드 검사
+      - name: Test build
+        run: yarn build
+
+      # 타입 오류 검사
+      - name: Test type error
+        run: yarn tsc --noEmit
