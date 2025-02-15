@@ -4,6 +4,7 @@ on:
   pull_request: # Pull Request 생성 또는 업데이트 시 트리거
     branches:
       - develop # develop 브랜치로의 PR에 대해서만 트리거
+  workflow_dispatch: # 수동 실행 가능하도록 추가
 
 jobs:
   test:
