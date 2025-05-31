@@ -1,1 +1,1566 @@
-{}
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ScheduleResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"repeatType": {
+						"type": "string"
+					},
+					"notification": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"userId",
+					"description",
+					"startDate",
+					"endDate",
+					"repeatType",
+					"notification"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_ScheduleResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/ScheduleResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ErrorDetails": {
+				"anyOf": [
+					{
+						"properties": {
+							"scheduleId": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"reason": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"endDate": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"startDate": {
+								"type": "string",
+								"format": "date-time"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"groupId": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"userId": {
+								"type": "string"
+							},
+							"groupId": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"properties": {
+							"focusTargetId": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					}
+				],
+				"nullable": true
+			},
+			"ITsoaErrorResponse": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"properties": {
+							"data": {
+								"$ref": "#/components/schemas/ErrorDetails"
+							},
+							"reason": {
+								"type": "string"
+							},
+							"errorCode": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"data",
+							"reason",
+							"errorCode"
+						],
+						"type": "object"
+					},
+					"success": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BodyToSchedule": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"repeatType": {
+						"type": "string"
+					},
+					"notification": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"title",
+					"description",
+					"startDate",
+					"endDate",
+					"repeatType",
+					"notification"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"WeeklyScheduleResponse": {
+				"properties": {
+					"userId": {
+						"type": "string"
+					},
+					"schedules": {
+						"properties": {
+							"0": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"1": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"2": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"3": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"4": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"5": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"6": {
+								"items": {
+									"properties": {
+										"endDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"description": {
+											"type": "string",
+											"nullable": true
+										},
+										"title": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endDate",
+										"startDate",
+										"description",
+										"title",
+										"id"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							}
+						},
+						"required": [
+							"6",
+							"5",
+							"4",
+							"3",
+							"2",
+							"1",
+							"0"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"userId",
+					"schedules"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_WeeklyScheduleResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/WeeklyScheduleResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GroupResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"hostId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"hostId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_GroupResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/GroupResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BodyToGroup": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"name",
+					"description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GroupListResponse": {
+				"properties": {
+					"groups": {
+						"items": {
+							"properties": {
+								"memberCount": {
+									"type": "number",
+									"format": "double"
+								},
+								"name": {
+									"type": "string"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"memberCount",
+								"name",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"groups"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_GroupListResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/GroupListResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GroupUserResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"group": {
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"name",
+							"id"
+						],
+						"type": "object"
+					},
+					"user": {
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"name",
+							"id"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"id",
+					"group",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_GroupUserResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/GroupUserResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FocusTargetResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"target": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "string"
+					},
+					"status": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"target",
+					"userId",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_FocusTargetResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/FocusTargetResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FocusTargetListResponse": {
+				"properties": {
+					"targets": {
+						"items": {
+							"properties": {
+								"status": {
+									"type": "number",
+									"format": "double"
+								},
+								"userId": {
+									"type": "string"
+								},
+								"target": {
+									"type": "string"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"status",
+								"userId",
+								"target",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"targets"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_FocusTargetListResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/FocusTargetListResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"sessionAuth": {
+				"type": "apiKey",
+				"in": "cookie",
+				"name": "connect.sid"
+			}
+		}
+	},
+	"info": {
+		"title": "Server",
+		"version": "1.0.0",
+		"description": "25-1 Capstone Server",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "asjasj3964 ",
+			"email": "asjasj3964@naver.com"
+		}
+	},
+	"paths": {
+		"/schedule": {
+			"post": {
+				"operationId": "HandleScheduleAdd",
+				"responses": {
+					"200": {
+						"description": "일정 생성 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_ScheduleResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"id": "1",
+												"title": "string",
+												"userId": "1",
+												"description": "string",
+												"startDate": "2025-01-17T03:50:25",
+												"endDate": "2025-01-17T03:50:25",
+												"repeatType": "반복 없음",
+												"notification": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "유효하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "SCH-400",
+												"reason": "일정 생성 중 오류가 발생했습니다.",
+												"data": {
+													"scheduleId": "1"
+												}
+											}
+										}
+									},
+									"Example 2": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "SCH-400",
+												"reason": "종료일을 시작일과 일치하거나 과거로 설정할 수 없습니다.",
+												"data": {
+													"startDate": "2025-05-16T18:50:25.000Z",
+													"endDate": "2025-05-12T18:50:25.000Z"
+												}
+											}
+										}
+									},
+									"Example 3": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "SCH-400",
+												"reason": "이미 존재하는 일정과 시간이 겹칩니다.",
+												"data": {
+													"startDate": "2025-05-16T18:50:25.000Z",
+													"endDate": "2025-05-17T18:50:25.000Z"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "일정을 생성하는 API입니다.",
+				"summary": "일정 생성 API",
+				"tags": [
+					"Schedule-Controller"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "일정 제목, 설명, 시작일, 종료일, 반복 여부, 알림",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BodyToSchedule",
+								"description": "일정 제목, 설명, 시작일, 종료일, 반복 여부, 알림"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/schedule/weekly": {
+			"get": {
+				"operationId": "HandleWeekScheduleGet",
+				"responses": {
+					"200": {
+						"description": "주간 일정 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_WeeklyScheduleResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"userId": "1",
+												"schedules": {
+													"0": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"1": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"2": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"3": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"4": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"5": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													],
+													"6": [
+														{
+															"id": "1",
+															"title": "string",
+															"description": "string",
+															"startDate": "2025-01-17T03:50:25",
+															"endDate": "2025-01-17T03:50:25"
+														}
+													]
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "주간 일정을 조회하는 API입니다.",
+				"summary": "주간 일정 조회 API",
+				"tags": [
+					"Schedule-Controller"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/schedule/{scheduleId}": {
+			"get": {
+				"operationId": "HandleScheduleGet",
+				"responses": {
+					"200": {
+						"description": "특정 일정 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_ScheduleResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"userId": "1",
+												"schedules": {
+													"id": "1",
+													"title": "string",
+													"description": "string",
+													"startDate": "2025-01-17T03:50:25",
+													"endDate": "2025-01-17T03:50:25",
+													"repeatType": "반복 안함",
+													"notification": 0
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "존재하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "SCH-404",
+												"reason": "해당 일정을 찾을 수 없습니다.",
+												"data": {
+													"scheduleId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "특정 일정을 조회하는 API입니다.",
+				"summary": "특정 일정 조회 API",
+				"tags": [
+					"Schedule-Controller"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "scheduleId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/group": {
+			"post": {
+				"operationId": "HandleGroupAdd",
+				"responses": {
+					"200": {
+						"description": "그룹 생성 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_GroupResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"id": "1",
+												"name": "string",
+												"hostId": "1",
+												"description": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "유효하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "GRP-400",
+												"reason": "그룹 생성 중 오류가 발생했습니다.",
+												"data": {
+													"groupId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "스터디 그룹을 생성하는 API입니다.",
+				"summary": "그룹 생성 API",
+				"tags": [
+					"Group-Controller"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "그룹 이름, 설명",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BodyToGroup",
+								"description": "그룹 이름, 설명"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "HandleGroupListGet",
+				"responses": {
+					"200": {
+						"description": "나의 그룹 리스트 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_GroupListResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"groups": [
+													{
+														"id": "1",
+														"name": "string",
+														"memberCount": 1
+													}
+												]
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "내가 속한 스터디 그룹 리스트를 조회하는 API입니다.",
+				"summary": "나의 그룹 리스트 조회 API",
+				"tags": [
+					"Group-Controller"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/group/{groupId}": {
+			"get": {
+				"operationId": "HandleGroupGet",
+				"responses": {
+					"200": {
+						"description": "특정 그룹 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_GroupResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"id": "1",
+												"name": "string",
+												"hostId": "1",
+												"description": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "존재하지 않는 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "GRP-404",
+												"reason": "특정 그룹 조회 중 오류가 발생했습니다.",
+												"data": {
+													"groupId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "특정 스터디 그룹을 조회하는 API입니다.",
+				"summary": "특정 그룹 조회 API",
+				"tags": [
+					"Group-Controller"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "그룹 ID",
+						"in": "path",
+						"name": "groupId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/group/{groupId}/user": {
+			"post": {
+				"operationId": "HandledGroupJoin",
+				"responses": {
+					"200": {
+						"description": "그룹 가입 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_GroupUserResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"userId": "1",
+												"groupId": "1"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "유효하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "GRP-400",
+												"reason": "그룹 가입 중 오류가 발생했습니다.",
+												"data": {
+													"groupId": "1",
+													"userId": "1"
+												}
+											}
+										}
+									},
+									"Example 2": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "GRP-400",
+												"reason": "이미 가입한 그룹입니다.",
+												"data": {
+													"groupId": "1",
+													"userId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "스터디 그룹에 가입하는 API입니다.",
+				"summary": "그룹 가입 API",
+				"tags": [
+					"Group-Controller"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "groupId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/focusTarget/enable/{focusTargetId}": {
+			"patch": {
+				"operationId": "UpdateFocusTargetEnable",
+				"responses": {
+					"200": {
+						"description": "허용 동작 활성화 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_FocusTargetResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"focusTargetId": "1",
+												"userId": "1",
+												"status": 1
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "유효하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "FCT-400",
+												"reason": "허용 동작 업데이트 중 오류가 발생하였습니다.",
+												"data": {
+													"focusTargetId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "허용 동작을 활성화하는 API입니다.",
+				"summary": "허용 동작 활성화 API",
+				"tags": [
+					"Focus-Target-Controller"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "focusTargetId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/focusTarget/disable/{focusTargetId}": {
+			"patch": {
+				"operationId": "UpdateFocusTargetDisable",
+				"responses": {
+					"200": {
+						"description": "허용 동작 비활성화 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_FocusTargetResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"focusTargetId": "1",
+												"userId": "1",
+												"status": 0
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "유효하지 않은 데이터 에러",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaErrorResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "FAIL",
+											"success": null,
+											"error": {
+												"errorCode": "FCT-400",
+												"reason": "허용 동작 업데이트 중 오류가 발생하였습니다.",
+												"data": {
+													"focusTargetId": "1"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "허용 동작을 비활성화하는 API입니다.",
+				"summary": "허용 동작 비활성화 API",
+				"tags": [
+					"Focus-Target-Controller"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "focusTargetId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/focusTarget": {
+			"get": {
+				"operationId": "GetFocusTargetList",
+				"responses": {
+					"200": {
+						"description": "허용 동작 리스트 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_FocusTargetListResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"targets": [
+													{
+														"id": "1",
+														"target": "책/교재",
+														"userId": "1",
+														"status": 0
+													}
+												]
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "허용 동작 리스트를 조회하는 API입니다.",
+				"summary": "허용 동작 리스트 조회 API",
+				"tags": [
+					"Focus-Target-Controller"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3000",
+			"description": "local server"
+		}
+	]
+}
