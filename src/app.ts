@@ -10,6 +10,14 @@ import process from 'process';
 import swaggerUiExpress from 'swagger-ui-express';
 import swaggerDocument from '../swagger/swagger.json' assert {type: 'json'};
 import {BaseError} from './error.js';
+import passport from 'passport';
+import session from 'express-session';
+import {PrismaSessionStore} from '@quixo3/prisma-session-store';
+import cookieParser from 'cookie-parser';
+import {sessionAuthMiddleware} from './auth.config.js';
+import {prisma} from './db.config.js';
+import {RegisterRoutes} from './routers/tsoaRoutes.js';
+import {authRouter} from './routers/auth.router.js';
 
 dotenv.config();
 
@@ -20,6 +28,7 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 
 app.use(
   '/api-docs/',
@@ -43,6 +52,46 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
   next();
 });
+
+// Session 설정
+app.use(
+  session({
+    secret: process.env.EXPRESS_SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 일주일
+    },
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000,
+      dbRecordIdIsSessionId: true,
+      serializer: {
+        stringify: (obj: unknown) =>
+          JSON.stringify(obj, (_, value) =>
+            typeof value === 'bigint' ? value.toString() : value,
+          ),
+        parse: (str: string) =>
+          JSON.parse(str, (_, value) =>
+            typeof value === 'string' && /^\d+$/.test(value)
+              ? BigInt(value)
+              : value,
+          ),
+      },
+    }),
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 로그인 전
+app.use('/oauth2', authRouter);
+
+// 인증 미들웨어
+app.use(sessionAuthMiddleware);
+
+// 로그인 후
+RegisterRoutes(app);
 
 app.get('/', (req, res) => {
   res.send('25-1 Capstone');

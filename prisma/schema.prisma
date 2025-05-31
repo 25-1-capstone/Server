@@ -14,7 +14,166 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id    BigInt @id @default(autoincrement())
+  email String @db.VarChar(50) @unique(map: "email")
+  name  String @db.VarChar(30)
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  ifofflines OfflineTimeTable[]
+  isEmpties EmptyTimeTable[]
+  socialAccounts SocialAccount[]
+  userGroups UserGroup[]
+  schedules Schedule[]
+  focusTargets FocusTarget[]
+
+  @@map("user")
 }
+
+model Group {
+  id    BigInt @id @default(autoincrement())
+  name String @db.VarChar(30) 
+  description String? @db.VarChar(100) @default("")
+  hostId BigInt @map("host_id")
+  
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  userGroups UserGroup[]
+
+  @@map("group")
+}
+
+model UserGroup {
+  id    BigInt @id @default(autoincrement())
+  userId BigInt @map("user_id")
+  groupId BigInt @map("group_id")
+  
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  @@map("user_group")
+}
+
+model SocialAccount {
+  id BigInt @id @default(autoincrement())
+  provider String @db.VarChar(30)
+  providerUserId String @db.VarChar(255) @map("provider_user_id")
+  userId BigInt @map("user_id")
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("social_account")
+}
+
+model Session {
+  id String @id @db.VarChar(255)
+  sid String @unique @db.VarChar(255)
+  data String @db.VarChar(512)
+  expiresAt DateTime @db.Timestamp(3) @map("expires_at")
+  
+  @@map("session")
+}
+
+model FocusTarget {
+  id    BigInt @id @default(autoincrement())
+  target String @db.VarChar(50)
+  userId  BigInt @map("user_id")
+  status Int @db.TinyInt @default(0)
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  disabledFocusTargetTimeTables DisabledFocusTargetTimeTable[]
+  enabledFocusTargetTimeTables EnabledFocusTargetTimeTable[]
+
+  @@map("focus_target")
+}
+
+model OfflineTimeTable {
+  id    BigInt @id @default(autoincrement())
+  userId  BigInt @map("user_id")
+  measurementStartAt DateTime @map("measurement_start_at")
+  measurementEndAt DateTime @map("measurement_end_at")
+
+  status Int @db.TinyInt @default(0)
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("offline_time_table")
+}
+
+model EmptyTimeTable {
+  id    BigInt @id @default(autoincrement())
+  userId  BigInt @map("user_id")
+  measurementStartAt DateTime @map("measurement_start_at")
+  measurementEndAt DateTime @map("measurement_end_at")
+
+  status Int @db.TinyInt @default(0)
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("empty_time_table")
+}
+
+model Schedule {
+  id    BigInt @id @default(autoincrement())
+  title String @db.VarChar(50)
+  userId  BigInt @map("user_id")
+  description String? @db.VarChar(100)
+  startDate DateTime @default(now()) @map("start_date")
+  endDate DateTime @map("end_date")
+  repeatType String @db.VarChar(6) @default("반복 안함") @map("repeat_type")
+  notification Int @db.TinyInt @default(0)
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("schedule")
+}
+
+model DisabledFocusTargetTimeTable {
+  id    BigInt @id @default(autoincrement())
+  measurementStartAt DateTime @map("measurement_start_at")
+  measurementEndAt DateTime @map("measurement_end_at")
+  focusTargetId  BigInt @map("focus_target_id")
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  focusTarget FocusTarget? @relation(fields: [focusTargetId], references: [id], onDelete: Cascade)
+
+  @@map("disabled_focus_target_time_table")
+} 
+
+model EnabledFocusTargetTimeTable {
+  id    BigInt @id @default(autoincrement())
+  measurementStartAt DateTime @map("measurement_start_at")
+  measurementEndAt DateTime @map("measurement_end_at")
+  focusTargetId  BigInt? @map("focus_target_id")
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  focusTarget FocusTarget? @relation(fields: [focusTargetId], references: [id], onDelete: Cascade)
+
+  @@map("enabled_focus_target_time_table")
+} 
