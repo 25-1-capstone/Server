@@ -18,6 +18,7 @@ import cookieParser from 'cookie-parser';
 import {prisma} from './db.config.js';
 import {RegisterRoutes} from './routers/tsoaRoutes.js';
 import {authRouter} from './routers/auth.router.js';
+import './ws-study-status-server.js';
 
 dotenv.config();
 
