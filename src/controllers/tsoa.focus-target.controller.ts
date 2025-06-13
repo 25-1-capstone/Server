@@ -13,6 +13,7 @@ import {
 import {Request as ExpressRequest} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {
+  DailyStatisticsResponse,
   FocusTargetListResponse,
   FocusTargetResponse,
 } from '../models/focus-target.model.js';
@@ -22,6 +23,7 @@ import {
   TsoaSuccessResponse,
 } from '../models/tsoa-response.js';
 import {
+  DailyStatisticsGet,
   FocusTargetListGet,
   FocusTargetUpdateDisable,
   FocusTargetUpdateEnable,
@@ -142,11 +144,10 @@ export class FocusTargetController extends Controller {
       ],
     },
   })
-  public async GetFocusTargetList(
-    @Request() req: ExpressRequest,
-  ): Promise<ITsoaSuccessResponse<FocusTargetListResponse>> {
+  public async GetFocusTargetList() // @Request() req: ExpressRequest,
+  : Promise<ITsoaSuccessResponse<FocusTargetListResponse>> {
     try {
-      const userId = BigInt(req.user!.id);
+      const userId = BigInt(11); //BigInt(req.user!.id);
       const focusTargetList = await FocusTargetListGet(userId);
       return new TsoaSuccessResponse(focusTargetList);
     } catch (error) {
@@ -163,4 +164,59 @@ export class FocusTargetController extends Controller {
   //     throw error;
   //   }
   // }
+
+  /**
+   * 집중 시간 일간 통계를 조회하는 API입니다.
+   *
+   * 0: 토, 1: 일, 2: 월, 3: 화, 4: 수, 5: 목, 6: 금
+   *
+   * @summary 일간 통계 조회 API
+   * @returns 일간 통계 조회 결과를 반환합니다.
+   */
+  @Get('/statistics/daily')
+  @Tags('Focus-Target-Controller')
+  @SuccessResponse(StatusCodes.OK, '일간 통계 조회 성공 응답')
+  @Example({
+    resultType: 'SUCCESS',
+    error: null,
+    success: {
+      dailyTotalTime: {
+        '0': 60,
+        '1': 60,
+        '2': 60,
+        '3': 60,
+        '4': 60,
+        '5': 60,
+        '6': 60,
+      },
+      today: {
+        disabledTarget: [
+          {
+            target: '책/교재',
+            targetId: '1',
+            startTime: '2025-01-17T03:50:25',
+            endTime: '2025-01-17T04:50:25',
+          },
+        ],
+        enabledTarget: [
+          {
+            target: '책/교재',
+            targetId: '1',
+            startTime: '2025-01-17T03:50:25',
+            endTime: '2025-01-17T04:50:25',
+          },
+        ],
+      },
+    },
+  })
+  public async GetDailyStatistics() // @Request() req: ExpressRequest,
+  : Promise<ITsoaSuccessResponse<DailyStatisticsResponse>> {
+    try {
+      const userId = BigInt(11); //BigInt(req.user!.id);
+      const dailyStatistics = await DailyStatisticsGet(userId);
+      return new TsoaSuccessResponse(dailyStatistics);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -792,6 +792,147 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"DailyStatisticsResponse": {
+				"properties": {
+					"dailyTotalTime": {
+						"properties": {
+							"0": {
+								"type": "number",
+								"format": "double"
+							},
+							"1": {
+								"type": "number",
+								"format": "double"
+							},
+							"2": {
+								"type": "number",
+								"format": "double"
+							},
+							"3": {
+								"type": "number",
+								"format": "double"
+							},
+							"4": {
+								"type": "number",
+								"format": "double"
+							},
+							"5": {
+								"type": "number",
+								"format": "double"
+							},
+							"6": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"6",
+							"5",
+							"4",
+							"3",
+							"2",
+							"1",
+							"0"
+						],
+						"type": "object"
+					},
+					"today": {
+						"properties": {
+							"enabledTarget": {
+								"items": {
+									"properties": {
+										"endTime": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startTime": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"targetId": {
+											"type": "string"
+										},
+										"target": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endTime",
+										"startTime",
+										"targetId",
+										"target"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"disabledTarget": {
+								"items": {
+									"properties": {
+										"endTime": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"startTime": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"targetId": {
+											"type": "string"
+										},
+										"target": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"endTime",
+										"startTime",
+										"targetId",
+										"target"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							}
+						},
+						"required": [
+							"enabledTarget",
+							"disabledTarget"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"dailyTotalTime",
+					"today"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITsoaSuccessResponse_DailyStatisticsResponse_": {
+				"properties": {
+					"resultType": {
+						"type": "string"
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"success": {
+						"$ref": "#/components/schemas/DailyStatisticsResponse"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -1555,9 +1696,74 @@
 				"security": [],
 				"parameters": []
 			}
+		},
+		"/focusTarget/statistics/daily": {
+			"get": {
+				"operationId": "GetDailyStatistics",
+				"responses": {
+					"200": {
+						"description": "일간 통계 조회 성공 응답",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ITsoaSuccessResponse_DailyStatisticsResponse_"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"resultType": "SUCCESS",
+											"error": null,
+											"success": {
+												"dailyTotalTime": {
+													"0": 60,
+													"1": 60,
+													"2": 60,
+													"3": 60,
+													"4": 60,
+													"5": 60,
+													"6": 60
+												},
+												"today": {
+													"disabledTarget": [
+														{
+															"target": "책/교재",
+															"targetId": "1",
+															"startTime": "2025-01-17T03:50:25",
+															"endTime": "2025-01-17T04:50:25"
+														}
+													],
+													"enabledTarget": [
+														{
+															"target": "책/교재",
+															"targetId": "1",
+															"startTime": "2025-01-17T03:50:25",
+															"endTime": "2025-01-17T04:50:25"
+														}
+													]
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "집중 시간 일간 통계를 조회하는 API입니다.\n\n0: 토, 1: 일, 2: 월, 3: 화, 4: 수, 5: 목, 6: 금",
+				"summary": "일간 통계 조회 API",
+				"tags": [
+					"Focus-Target-Controller"
+				],
+				"security": [],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [
+		{
+			"url": "http://18.208.62.86:3000",
+			"description": "Production Server"
+		},
 		{
 			"url": "http://localhost:3000",
 			"description": "local server"
