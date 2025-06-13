@@ -9,6 +9,7 @@ import {UserModel} from './models/user.model.js';
 import {SocialProfile} from './models/auth.model.js';
 import {Request, Response, NextFunction} from 'express';
 import {ServerError, AuthError, SessionError} from './error.js';
+// import {publishUserId} from './mqtt-client.js';
 dotenv.config();
 
 const updateOrCreateSocialAccount = async (
@@ -50,7 +51,7 @@ export const kakaoStrategy = new KakaoStrategy(
   {
     clientID: process.env.PASSPORT_KAKAO_CLIENT_ID!,
     clientSecret: process.env.PASSPORT_KAKAO_CLIENT_SECRET!, // Optional in Kakao
-    callbackURL: 'http://localhost:3000/oauth2/callback/kakao',
+    callbackURL: `http://${process.env.EC2IP}:3000/oauth2/callback/kakao`,
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
@@ -84,7 +85,7 @@ const verifyUser = async (
     // SocialAccount 데이터 추가 또는 업데이트
     const {id, email, name} = user;
     await updateOrCreateSocialAccount(id, profile, provider);
-
+    // publishUserId(user.id);
     return {id, email, name};
   }
 
@@ -106,6 +107,8 @@ const verifyUser = async (
       {target: 'PC 보기', userId: createdUser.id},
     ],
   });
+
+  // publishUserId(createdUser.id);
 
   // SocialAccount 데이터 추가
   const {id, email, name} = createdUser;

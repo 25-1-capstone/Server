@@ -2,7 +2,7 @@ import {
   Controller,
   Example,
   Post,
-  Request,
+  // Request,
   Route,
   SuccessResponse,
   Response,
@@ -17,7 +17,7 @@ import {
   ITsoaSuccessResponse,
   TsoaSuccessResponse,
 } from '../models/tsoa-response.js';
-import {Request as ExpressRequest} from 'express';
+// import {Request as ExpressRequest} from 'express';
 import {
   BodyToGroup,
   GroupListResponse,
@@ -68,11 +68,11 @@ export class GroupController extends Controller {
     },
   })
   public async handleGroupAdd(
-    @Request() req: ExpressRequest,
+    // @Request() req: ExpressRequest,
     @Body() body: BodyToGroup,
   ): Promise<ITsoaSuccessResponse<GroupResponse>> {
     try {
-      const hostId = BigInt(req.user!.id);
+      const hostId = BigInt(11); //BigInt(req.user!.id);
       const group = await groupCreate(hostId, bodyToGroup(body));
       return new TsoaSuccessResponse(group);
     } catch (error) {
@@ -114,7 +114,7 @@ export class GroupController extends Controller {
     },
   })
   public async handleGroupGet(
-    @Request() req: ExpressRequest,
+    // @Request() req: ExpressRequest,
     @Path('groupId') groupIdParam: string,
   ): Promise<ITsoaSuccessResponse<GroupResponse>> {
     try {
@@ -143,11 +143,10 @@ export class GroupController extends Controller {
       groups: [{id: '1', name: 'string', memberCount: 1}],
     },
   })
-  public async handleGroupListGet(
-    @Request() req: ExpressRequest,
-  ): Promise<ITsoaSuccessResponse<GroupListResponse>> {
+  public async handleGroupListGet() // @Request() req: ExpressRequest,
+  : Promise<ITsoaSuccessResponse<GroupListResponse>> {
     try {
-      const userId = BigInt(req.user!.id);
+      const userId = BigInt(11); //BigInt(req.user!.id);
       const group = await groupListGet(userId);
       return new TsoaSuccessResponse(group);
     } catch (error) {
@@ -200,11 +199,11 @@ export class GroupController extends Controller {
     },
   })
   public async handledGroupJoin(
-    @Request() req: ExpressRequest,
+    // @Request() req: ExpressRequest,
     @Path('groupId') groupIdParam: string,
   ): Promise<ITsoaSuccessResponse<GroupUserResponse>> {
     try {
-      const userId = BigInt(req.user!.id);
+      const userId = BigInt(11); //BigInt(req.user!.id);
       const groupId = BigInt(groupIdParam);
       const groupUser = await groupJoin(groupId, userId);
       return new TsoaSuccessResponse(groupUser);

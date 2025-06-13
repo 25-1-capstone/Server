@@ -14,7 +14,7 @@ import passport from 'passport';
 import session from 'express-session';
 import {PrismaSessionStore} from '@quixo3/prisma-session-store';
 import cookieParser from 'cookie-parser';
-import {sessionAuthMiddleware} from './auth.config.js';
+// import {sessionAuthMiddleware} from './auth.config.js';
 import {prisma} from './db.config.js';
 import {RegisterRoutes} from './routers/tsoaRoutes.js';
 import {authRouter} from './routers/auth.router.js';
@@ -24,7 +24,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
+app.use(
+  // cors({
+  //   origin: ['http://localhost:3000', 'http://18.208.62.86:3000'], // 프론트엔드 주소
+  //   credentials: true,
+  // }),
+  cors(),
+);
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -61,6 +67,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 일주일
+      // sameSite: 'lax',
+      // secure: false,
+      // httpOnly: true,
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000,
@@ -88,7 +97,7 @@ app.use(passport.session());
 app.use('/oauth2', authRouter);
 
 // 인증 미들웨어
-app.use(sessionAuthMiddleware);
+// app.use(sessionAuthMiddleware);
 
 // 로그인 후
 RegisterRoutes(app);
@@ -127,6 +136,6 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(port, () => {
+app.listen(Number(port), '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`);
 });

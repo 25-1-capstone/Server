@@ -9,6 +9,10 @@
     "spec": {
       "servers": [
         {
+          "url": "http://18.208.62.86:3000",
+          "description": "Production Server"
+        },
+        {
           "url": "http://localhost:3000",
           "description": "local server"
         }

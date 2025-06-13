@@ -5,5 +5,6 @@ declare namespace NodeJS {
     PASSPORT_KAKAO_CLIENT_ID: string;
     PASSPORT_KAKAO_CLIENT_SECRET: string;
     EXPRESS_SESSION_SECRET: string;
+    EC2IP: string;
   }
 }
