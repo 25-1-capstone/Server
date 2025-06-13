@@ -46,6 +46,7 @@ authRouter.get(
   passport.authenticate('kakao', {failureRedirect: '/'}),
   (req, res) => {
     // 로그인 성공 시 처리
-    res.redirect('/user/mypage'); // 온보딩 페이지로 리디렉션(예정)
+    // res.redirect('/user/mypage'); // 온보딩 페이지로 리디렉션(예정)
+    res.redirect('http://localhost:3000/onboarding');
   },
 );

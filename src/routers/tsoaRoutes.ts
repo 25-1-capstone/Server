@@ -195,6 +195,25 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DailyStatisticsResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "dailyTotalTime": {"dataType":"nestedObjectLiteral","nestedProperties":{"0":{"dataType":"double","required":true},"1":{"dataType":"double","required":true},"2":{"dataType":"double","required":true},"3":{"dataType":"double","required":true},"4":{"dataType":"double","required":true},"5":{"dataType":"double","required":true},"6":{"dataType":"double","required":true}},"required":true},
+            "today": {"dataType":"nestedObjectLiteral","nestedProperties":{"enabledTarget":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"endTime":{"dataType":"datetime","required":true},"startTime":{"dataType":"datetime","required":true},"targetId":{"dataType":"string","required":true},"target":{"dataType":"string","required":true}}},"required":true},"disabledTarget":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"endTime":{"dataType":"datetime","required":true},"startTime":{"dataType":"datetime","required":true},"targetId":{"dataType":"string","required":true},"target":{"dataType":"string","required":true}}},"required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ITsoaSuccessResponse_DailyStatisticsResponse_": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"string","required":true},
+            "error": {"dataType":"enum","enums":[null],"required":true},
+            "success": {"ref":"DailyStatisticsResponse","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -213,7 +232,6 @@ export function RegisterRoutes(app: Router) {
 
     
         const argsScheduleController_handleScheduleAdd: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 body: {"in":"body","name":"body","required":true,"ref":"BodyToSchedule"},
         };
         app.post('/schedule',
@@ -244,7 +262,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsScheduleController_handleWeekScheduleGet: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.get('/schedule/weekly',
             ...(fetchMiddlewares<RequestHandler>(ScheduleController)),
@@ -305,7 +322,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsGroupController_handleGroupAdd: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 body: {"in":"body","name":"body","required":true,"ref":"BodyToGroup"},
         };
         app.post('/group',
@@ -336,7 +352,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsGroupController_handleGroupGet: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 groupIdParam: {"in":"path","name":"groupId","required":true,"dataType":"string"},
         };
         app.get('/group/:groupId',
@@ -367,7 +382,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsGroupController_handleGroupListGet: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.get('/group',
             ...(fetchMiddlewares<RequestHandler>(GroupController)),
@@ -397,7 +411,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsGroupController_handledGroupJoin: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 groupIdParam: {"in":"path","name":"groupId","required":true,"dataType":"string"},
         };
         app.post('/group/:groupId/user',
@@ -490,7 +503,6 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsFocusTargetController_GetFocusTargetList: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"request","name":"req","required":true,"dataType":"object"},
         };
         app.get('/focusTarget',
             ...(fetchMiddlewares<RequestHandler>(FocusTargetController)),
@@ -508,6 +520,35 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'GetFocusTargetList',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 200,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFocusTargetController_GetDailyStatistics: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/focusTarget/statistics/daily',
+            ...(fetchMiddlewares<RequestHandler>(FocusTargetController)),
+            ...(fetchMiddlewares<RequestHandler>(FocusTargetController.prototype.GetDailyStatistics)),
+
+            async function FocusTargetController_GetDailyStatistics(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsFocusTargetController_GetDailyStatistics, request, response });
+
+                const controller = new FocusTargetController();
+
+              await templateService.apiHandler({
+                methodName: 'GetDailyStatistics',
                 controller,
                 response,
                 next,

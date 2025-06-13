@@ -4,14 +4,17 @@ import {
 } from 'src/dtos/focus-target.dto.js';
 import {FocusTargetEnableError} from 'src/error.js';
 import {
+  DailyStatisticsResponse,
   FocusTargetListResponse,
   FocusTargetResponse,
 } from 'src/models/focus-target.model.js';
 import {
   allowFocusTarget,
+  getDailyStatistics,
   getFocusTargetList,
   notAllowFocusTarget,
 } from 'src/repositories/focus-target.repository.js';
+import {responseFromDailyStatistics} from '../dtos/focus-target.dto.js';
 
 export const FocusTargetUpdateEnable = async (
   focusTargetId: bigint,
@@ -42,4 +45,11 @@ export const FocusTargetListGet = async (
 ): Promise<FocusTargetListResponse> => {
   const focusTargetList = await getFocusTargetList(userId);
   return responseFromFocusTargetList(focusTargetList);
+};
+
+export const DailyStatisticsGet = async (
+  userId: bigint,
+): Promise<DailyStatisticsResponse> => {
+  const dailyStatistics = await getDailyStatistics(userId);
+  return responseFromDailyStatistics(dailyStatistics);
 };

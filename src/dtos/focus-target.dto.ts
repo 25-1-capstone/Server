@@ -1,4 +1,5 @@
 import {
+  DailyStatisticsResponse,
   FocusTargetListResponse,
   FocusTargetResponse,
 } from 'src/models/focus-target.model.js';
@@ -27,5 +28,28 @@ export const responseFromFocusTargetList = ({
       userId: target.userId,
       status: target.status,
     })),
+  };
+};
+
+export const responseFromDailyStatistics = ({
+  dailyTotalTime,
+  today,
+}: DailyStatisticsResponse): DailyStatisticsResponse => {
+  return {
+    dailyTotalTime: dailyTotalTime,
+    today: {
+      disabledTarget: today.disabledTarget.map(target => ({
+        targetId: target.targetId,
+        startTime: target.startTime,
+        endTime: target.endTime,
+        target: target.target,
+      })),
+      enabledTarget: today.enabledTarget.map(target => ({
+        targetId: target.targetId,
+        startTime: target.startTime,
+        endTime: target.endTime,
+        target: target.target,
+      })),
+    },
   };
 };

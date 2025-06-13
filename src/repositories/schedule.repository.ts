@@ -9,6 +9,7 @@ export const createSchedule = async (
   data: BodyToSchedule,
   userId: bigint,
 ): Promise<bigint | null> => {
+  console.log(data);
   const checkOverlapping = await prisma.schedule.findFirst({
     where: {
       userId: userId,
