@@ -102,11 +102,11 @@ export class ScheduleController extends Controller {
     },
   })
   public async handleScheduleAdd(
-    // @Request() req: ExpressRequest,
+    @Request() req: ExpressRequest,
     @Body() body: BodyToSchedule,
   ): Promise<ITsoaSuccessResponse<ScheduleResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
       const schedule = await scheduleCreate(userId, bodyToSchedule(body));
       return new TsoaSuccessResponse(schedule);
     } catch (error) {
@@ -195,10 +195,10 @@ export class ScheduleController extends Controller {
       },
     },
   })
-  public async handleWeekScheduleGet() // @Request() req: ExpressRequest,
+  public async handleWeekScheduleGet(@Request() req: ExpressRequest)
   : Promise<ITsoaSuccessResponse<WeeklyScheduleResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
 
       const weeklySchedule = await weeklyScheduleGet(userId);
       console.log('최종 주간 일정:', weeklySchedule);

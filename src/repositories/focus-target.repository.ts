@@ -103,111 +103,58 @@ export const getFocusTargetList = async (
 };
 
 export async function saveFocusTargetState(
-  userId: bigint,
+  // userId: bigint,
   data: FocusTargetState,
 ): Promise<void | null> {
   const targetMap: Record<string, string> = {
-    '1': '핸드폰',
-    '2': '책 읽기',
-    '3': 'PC 보기',
-    '4': '자리 비움',
-    '5': '오프라인',
+    '77': '핸드폰',
+    '84': '책 읽기',
+    '73': 'PC 보기',
+    '4': '기타',
+    '-1': '자리 비움',
   };
-  const checkFocusTargetState = await prisma.focusTarget.findFirst({
-    where: {
-      target: targetMap[data.targetId],
-      userId: BigInt(userId),
-    },
-  });
+  if (data.targetId !== '4' && data.targetId !== '-1') {
+    const checkFocusTargetState = await prisma.focusTarget.findFirst({
+      where: {
+        target: targetMap[data.targetId],
+        userId: BigInt(data.userId),
+      },
+    });
 
-  if (checkFocusTargetState === null) {
-    return null;
-  }
+    if (checkFocusTargetState === null) {
+      return null;
+    }
 
-  if (checkFocusTargetState.status === 1) {
-    await prisma.enabledFocusTargetTimeTable.create({
+    if (checkFocusTargetState.status === 1) {
+      await prisma.enabledFocusTargetTimeTable.create({
+        data: {
+          measurementStartAt: new Date(data.timestamp),
+          focusTargetId: checkFocusTargetState.id,
+        },
+      });
+    } else {
+      await prisma.disabledFocusTargetTimeTable.create({
+        data: {
+          measurementStartAt: new Date(data.timestamp),
+          focusTargetId: checkFocusTargetState.id,
+        },
+      });
+    }
+  } else if (data.targetId === '4') {
+    await prisma.offlineTimeTable.create({
       data: {
-        measurementStartAt: new Date(data.isInitial),
-        measurementEndAt: new Date(data.timestamp),
-        focusTargetId: checkFocusTargetState.id,
+        userId: BigInt(data.userId),
+        measurementStartAt: new Date(data.timestamp),
       },
     });
   } else {
-    await prisma.disabledFocusTargetTimeTable.create({
+    await prisma.emptyTimeTable.create({
       data: {
-        measurementStartAt: new Date(data.isInitial),
-        measurementEndAt: new Date(data.timestamp),
-        focusTargetId: checkFocusTargetState.id,
+        userId: BigInt(data.userId),
+        measurementStartAt: new Date(data.timestamp),
       },
     });
   }
-
-  //if (data.isInitial) {
-  // if (checkFocusTargetState.status === 1) {
-  //   await prisma.enabledFocusTargetTimeTable.create({
-  //     data: {
-  //       measurementStartAt: new Date(data.isInitial),
-  //       measurementEndAt: new Date(data.timestamp),
-  //       focusTargetId: checkFocusTargetState.id,
-  //     },
-  //   });
-  // } else {
-  //   await prisma.disabledFocusTargetTimeTable.create({
-  //     data: {
-  //       measurementStartAt: new Date(data.isInitial),
-  //       measurementEndAt: new Date(data.timestamp),
-  //       focusTargetId: checkFocusTargetState.id,
-  //     },
-  //   });
-  // }
-  //} else {
-  //   const latestOffline = await prisma.offlineTimeTable.findFirst({
-  //     orderBy: {
-  //       measurementEndAt: 'desc',
-  //     },
-  //   });
-  //   const latestEmpty = await prisma.emptyTimeTable.findFirst({
-  //     orderBy: {
-  //       measurementEndAt: 'desc',
-  //     },
-  //   });
-  //   const latestEnableTarget =
-  //     await prisma.enabledFocusTargetTimeTable.findFirst({
-  //       orderBy: {
-  //         measurementEndAt: 'desc',
-  //       },
-  //     });
-  //   const latestDisableTarget =
-  //     await prisma.disabledFocusTargetTimeTable.findFirst({
-  //       orderBy: {
-  //         measurementEndAt: 'desc',
-  //       },
-  //     });
-  //   const t1 = latestOffline?.measurementEndAt;
-  //   const t2 = latestEmpty?.measurementEndAt;
-  //   const t3 = latestEnableTarget?.measurementEndAt;
-  //   const t4 = latestDisableTarget?.measurementEndAt;
-  //   const latestTimes = [t1, t2, t3, t4]
-  //     .filter(Boolean)
-  //     .reduce((a, b) => (a! > b! ? a : b));
-  //   if (checkFocusTargetState.status === 1) {
-  //     await prisma.enabledFocusTargetTimeTable.create({
-  //       data: {
-  //         measurementStartAt: new Date(latestTimes!),
-  //         measurementEndAt: new Date(data.timestamp),
-  //         focusTargetId: checkFocusTargetState.id,
-  //       },
-  //     });
-  //   } else {
-  //     await prisma.disabledFocusTargetTimeTable.create({
-  //       data: {
-  //         measurementStartAt: new Date(latestTimes!),
-  //         measurementEndAt: new Date(data.timestamp),
-  //         focusTargetId: checkFocusTargetState.id,
-  //       },
-  //     });
-  //   }
-  // }
 }
 
 export async function getDailyStatistics(
@@ -242,6 +189,9 @@ export async function getDailyStatistics(
           gte: startDate,
           lt: endDate,
         },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
+        },
       },
     },
   );
@@ -249,8 +199,8 @@ export async function getDailyStatistics(
   for (const target of enabledFocusTargets) {
     const start = target.measurementStartAt;
     const end = target.measurementEndAt;
-    const minutes = (end.getTime() - start.getTime()) / 60000;
-    const day = getKSTDay(start); // 한국 시간 기준 요일로 보정
+    const minutes = (end!.getTime() - start.getTime()) / 60000;
+    const day = start.getDay().toString() as keyof DailyStatisticsResponse['dailyTotalTime'];; // 한국 시간 기준 요일로 보정
     dailyStatistics[day] += minutes;
   }
 
@@ -262,29 +212,82 @@ export async function getDailyStatistics(
           gte: startDate,
           lt: endDate,
         },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
+        },
       },
     });
 
   for (const target of disabledFocusTargets) {
     const start = target.measurementStartAt;
     const end = target.measurementEndAt;
-    const minutes = (end.getTime() - start.getTime()) / 60000;
-    const day = getKSTDay(start); // 한국 시간 기준 요일로 보정
+    const minutes = (end!.getTime() - start.getTime()) / 60000;
+    const day = start.getDay().toString() as keyof DailyStatisticsResponse['dailyTotalTime'];; // 한국 시간 기준 요일로 보정
     dailyStatistics[day] += minutes;
   }
+
+  const otherFocusTargets =
+    await prisma.offlineTimeTable.findMany({
+      where: {
+        userId: userId,
+        measurementStartAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
+        },
+      },
+    });
+
+  for (const target of otherFocusTargets) {
+    const start = target.measurementStartAt;
+    const end = target.measurementEndAt;
+    const minutes = (end!.getTime() - start.getTime()) / 60000;
+    const day = start.getDay().toString() as keyof DailyStatisticsResponse['dailyTotalTime']; // 한국 시간 기준 요일로 보정
+    dailyStatistics[day] += minutes;
+  }
+
+  const emptyDatas =
+  await prisma.emptyTimeTable.findMany({
+    where: {
+      userId: userId,
+      measurementStartAt: {
+        gte: startDate,
+        lt: endDate,
+      },
+      measurementEndAt: {
+        not: null, // null이 아닌 경우만
+      },
+    },
+  });
+
+for (const data of emptyDatas) {
+  const start = data.measurementStartAt;
+  const end = data.measurementEndAt;
+  const minutes = (end!.getTime() - start.getTime()) / 60000;
+  const day = start.getDay().toString() as keyof DailyStatisticsResponse['dailyTotalTime'];; // 한국 시간 기준 요일로 보정
+  dailyStatistics[day] += minutes;
+}
+
   const todayStart = new Date(todayDate);
   todayStart.setHours(0, 0, 0, 0);
+  const KSTStart = getKSTDate(todayStart);
 
   const todayEnd = new Date(todayDate);
   todayEnd.setHours(23, 59, 59, 999);
+  const KSTEnd = getKSTDate(todayEnd);
 
   const enabledFocusTargetList =
     await prisma.enabledFocusTargetTimeTable.findMany({
       where: {
         focusTarget: {userId},
         measurementStartAt: {
-          gte: todayStart,
-          lt: todayEnd,
+          gte: KSTStart,
+          lt: KSTEnd,
+        },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
         },
       },
       include: {
@@ -299,7 +302,7 @@ export async function getDailyStatistics(
       targetId: enabledFocusTarget.focusTargetId!.toString(),
       target: enabledFocusTarget.focusTarget!.target,
       startTime: enabledFocusTarget.measurementStartAt,
-      endTime: enabledFocusTarget.measurementEndAt,
+      endTime: enabledFocusTarget.measurementEndAt!,
     }),
   );
 
@@ -308,8 +311,11 @@ export async function getDailyStatistics(
       where: {
         focusTarget: {userId},
         measurementStartAt: {
-          gte: todayStart,
-          lt: todayEnd,
+          gte: KSTStart,
+          lt: KSTEnd,
+        },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
         },
       },
       include: {
@@ -319,19 +325,70 @@ export async function getDailyStatistics(
       },
     });
 
+    const emptyList =
+    await prisma.emptyTimeTable.findMany({
+      where: {
+        userId: userId,
+        measurementStartAt: {
+          gte: KSTStart,
+          lt: KSTEnd,
+        },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
+        },
+      },
+    });
+    const otherTargetList =
+    await prisma.offlineTimeTable.findMany({
+      where: {
+        userId: userId,
+        measurementStartAt: {
+          gte: KSTStart,
+          lt: KSTEnd,
+        },
+        measurementEndAt: {
+          not: null, // null이 아닌 경우만
+        },
+      },
+    });
+
+  const formattedEmptyList = emptyList.map(
+    empty => ({
+      targetId: empty.id!.toString(),
+      target: '자리 비움',
+      startTime: empty.measurementStartAt,
+      endTime: empty.measurementEndAt!,
+    }),
+  );
+
+  const formattedOtherTargetList = otherTargetList.map(
+    otherTarget => ({
+      targetId: otherTarget.id!.toString(),
+      target: '기타',
+      startTime: otherTarget.measurementStartAt,
+      endTime: otherTarget.measurementEndAt!,
+    }),
+  );
+
   const formattedDisabledFocusTargetList = disabledFocusTargetList.map(
     disabledFocusTarget => ({
       targetId: disabledFocusTarget.focusTargetId!.toString(),
       target: disabledFocusTarget.focusTarget!.target,
       startTime: disabledFocusTarget.measurementStartAt,
-      endTime: disabledFocusTarget.measurementEndAt,
+      endTime: disabledFocusTarget.measurementEndAt!,
     }),
   );
+
+  const combinedDisabledList = [
+    ...formattedOtherTargetList,
+    ...formattedEmptyList,
+    ...formattedDisabledFocusTargetList
+  ];
 
   const formattedDailyStatistics = {
     dailyTotalTime: dailyStatistics,
     today: {
-      disabledTarget: formattedDisabledFocusTargetList,
+      disabledTarget: combinedDisabledList,
       enabledTarget: formattedEnabledFocusTargetList,
     },
   };
@@ -347,4 +404,12 @@ function getKSTDay(
   return localDate
     .getDay()
     .toString() as keyof DailyStatisticsResponse['dailyTotalTime'];
+}
+
+function getKSTDate(
+  date: Date,
+): Date {
+  const KST_OFFSET = 9 * 60 * 60 * 1000;
+  const localDate = new Date(date.getTime() + KST_OFFSET);
+  return localDate;
 }

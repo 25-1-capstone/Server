@@ -1761,7 +1761,7 @@
 	},
 	"servers": [
 		{
-			"url": "http://18.208.62.86:3000",
+			"url": "https://ai-study-lens.p-e.kr",
 			"description": "Production Server"
 		},
 		{

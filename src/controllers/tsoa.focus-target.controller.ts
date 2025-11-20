@@ -144,10 +144,11 @@ export class FocusTargetController extends Controller {
       ],
     },
   })
-  public async GetFocusTargetList() // @Request() req: ExpressRequest,
+  public async GetFocusTargetList(@Request() req: ExpressRequest,)
   : Promise<ITsoaSuccessResponse<FocusTargetListResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
+      console.log(req.user);
       const focusTargetList = await FocusTargetListGet(userId);
       return new TsoaSuccessResponse(focusTargetList);
     } catch (error) {
@@ -209,14 +210,17 @@ export class FocusTargetController extends Controller {
       },
     },
   })
-  public async GetDailyStatistics() // @Request() req: ExpressRequest,
+  public async GetDailyStatistics(@Request() req: ExpressRequest,)
   : Promise<ITsoaSuccessResponse<DailyStatisticsResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
+      console.log(req.user);
+
       const dailyStatistics = await DailyStatisticsGet(userId);
       return new TsoaSuccessResponse(dailyStatistics);
     } catch (error) {
       throw error;
     }
   }
+
 }

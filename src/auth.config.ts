@@ -9,6 +9,7 @@ import {UserModel} from './models/user.model.js';
 import {SocialProfile} from './models/auth.model.js';
 import {Request, Response, NextFunction} from 'express';
 import {ServerError, AuthError, SessionError} from './error.js';
+import { publishGroupIdList } from './mqtt-client.js';
 // import {publishUserId} from './mqtt-client.js';
 dotenv.config();
 
@@ -51,7 +52,7 @@ export const kakaoStrategy = new KakaoStrategy(
   {
     clientID: process.env.PASSPORT_KAKAO_CLIENT_ID!,
     clientSecret: process.env.PASSPORT_KAKAO_CLIENT_SECRET!, // Optional in Kakao
-    callbackURL: `http://${process.env.EC2IP}:3000/oauth2/callback/kakao`,
+    callbackURL: `${process.env.EC2IP}/oauth2/callback/kakao`,
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
@@ -83,9 +84,15 @@ const verifyUser = async (
 
   if (user) {
     // SocialAccount 데이터 추가 또는 업데이트
+    
+  console.log(user);
     const {id, email, name} = user;
     await updateOrCreateSocialAccount(id, profile, provider);
-    // publishUserId(user.id);
+    
+  console.log(user);
+    publishGroupIdList(user.id);
+    
+  console.log(user);
     return {id, email, name};
   }
 
@@ -100,6 +107,8 @@ const verifyUser = async (
     },
   });
 
+  console.log('createdUser:', createdUser);
+
   await prisma.focusTarget.createMany({
     data: [
       {target: '핸드폰', userId: createdUser.id},
@@ -108,11 +117,13 @@ const verifyUser = async (
     ],
   });
 
-  // publishUserId(createdUser.id);
+  publishGroupIdList(createdUser.id);
 
   // SocialAccount 데이터 추가
   const {id, email, name} = createdUser;
   await updateOrCreateSocialAccount(id, profile, provider);
+
+  console.log(user);
 
   return {id, email, name};
 };

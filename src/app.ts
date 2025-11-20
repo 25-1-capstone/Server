@@ -18,7 +18,9 @@ import cookieParser from 'cookie-parser';
 import {prisma} from './db.config.js';
 import {RegisterRoutes} from './routers/tsoaRoutes.js';
 import {authRouter} from './routers/auth.router.js';
-
+import './mqtt-client.js';
+// import './ws-status-server.js';
+import { sessionAuthMiddleware } from './auth.config.js';
 dotenv.config();
 
 const app = express();

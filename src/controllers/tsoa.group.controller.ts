@@ -10,6 +10,7 @@ import {
   Body,
   Path,
   Get,
+  Request
 } from '@tsoa/runtime';
 import {StatusCodes} from 'http-status-codes';
 import {
@@ -31,6 +32,7 @@ import {
   groupListGet,
 } from 'src/services/group.service.js';
 import {bodyToGroup} from 'src/dtos/group.dto.js';
+import {Request as ExpressRequest} from 'express';
 
 @Route('group')
 export class GroupController extends Controller {
@@ -68,11 +70,11 @@ export class GroupController extends Controller {
     },
   })
   public async handleGroupAdd(
-    // @Request() req: ExpressRequest,
+    @Request() req: ExpressRequest,
     @Body() body: BodyToGroup,
   ): Promise<ITsoaSuccessResponse<GroupResponse>> {
     try {
-      const hostId = BigInt(11); //BigInt(req.user!.id);
+      const hostId = BigInt(14);//(req.user!.id);
       const group = await groupCreate(hostId, bodyToGroup(body));
       return new TsoaSuccessResponse(group);
     } catch (error) {
@@ -114,11 +116,11 @@ export class GroupController extends Controller {
     },
   })
   public async handleGroupGet(
-    // @Request() req: ExpressRequest,
+    @Request() req: ExpressRequest,
     @Path('groupId') groupIdParam: string,
   ): Promise<ITsoaSuccessResponse<GroupResponse>> {
     try {
-      //   const hostId = BigInt(req.user!.id);
+        const hostId = BigInt(req.user!.id);
       const groupId = BigInt(groupIdParam);
       const group = await groupGet(groupId);
       return new TsoaSuccessResponse(group);
@@ -143,10 +145,10 @@ export class GroupController extends Controller {
       groups: [{id: '1', name: 'string', memberCount: 1}],
     },
   })
-  public async handleGroupListGet() // @Request() req: ExpressRequest,
+  public async handleGroupListGet(@Request() req: ExpressRequest)
   : Promise<ITsoaSuccessResponse<GroupListResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
       const group = await groupListGet(userId);
       return new TsoaSuccessResponse(group);
     } catch (error) {
@@ -199,14 +201,41 @@ export class GroupController extends Controller {
     },
   })
   public async handledGroupJoin(
-    // @Request() req: ExpressRequest,
+    @Request() req: ExpressRequest,
     @Path('groupId') groupIdParam: string,
   ): Promise<ITsoaSuccessResponse<GroupUserResponse>> {
     try {
-      const userId = BigInt(11); //BigInt(req.user!.id);
+      const userId = BigInt(14);//(req.user!.id);
       const groupId = BigInt(groupIdParam);
       const groupUser = await groupJoin(groupId, userId);
       return new TsoaSuccessResponse(groupUser);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * 내가 속한 스터디 그룹 리스트를 조회하는 API입니다.
+   *
+   * @summary 나의 그룹 리스트 조회 API
+   * @returns 나의 그룹 리스트 조회 결과
+   */
+  @Get('/')
+  @Tags('Group-Controller')
+  @SuccessResponse(StatusCodes.OK, '나의 그룹 리스트 조회 성공 응답')
+  @Example({
+    resultType: 'SUCCESS',
+    error: null,
+    success: {
+      groups: [{id: '1', name: 'string', memberCount: 1}],
+    },
+  })
+  public async handleGroupUserListGet(@Request() req: ExpressRequest)
+  : Promise<ITsoaSuccessResponse<GroupListResponse>> {
+    try {
+      const userId = BigInt(14);//(req.user!.id);
+      const group = await groupListGet(userId);
+      return new TsoaSuccessResponse(group);
     } catch (error) {
       throw error;
     }

@@ -28,6 +28,7 @@ model User {
   userGroups UserGroup[]
   schedules Schedule[]
   focusTargets FocusTarget[]
+  changedStatusTimeTables StatusTimeTable[]
 
   @@map("user")
 }
@@ -103,8 +104,8 @@ model FocusTarget {
 model OfflineTimeTable {
   id    BigInt @id @default(autoincrement())
   userId  BigInt @map("user_id")
-  measurementStartAt DateTime @map("measurement_start_at")
-  measurementEndAt DateTime @map("measurement_end_at")
+measurementStartAt DateTime @map("measurement_start_at")
+measurementEndAt   DateTime? @map("measurement_end_at")
 
   status Int @db.TinyInt @default(0)
   createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
@@ -118,7 +119,7 @@ model EmptyTimeTable {
   id    BigInt @id @default(autoincrement())
   userId  BigInt @map("user_id")
   measurementStartAt DateTime @map("measurement_start_at")
-  measurementEndAt DateTime @map("measurement_end_at")
+  measurementEndAt DateTime? @map("measurement_end_at")
 
   status Int @db.TinyInt @default(0)
   createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
@@ -151,7 +152,7 @@ model Schedule {
 model DisabledFocusTargetTimeTable {
   id    BigInt @id @default(autoincrement())
   measurementStartAt DateTime @map("measurement_start_at")
-  measurementEndAt DateTime @map("measurement_end_at")
+  measurementEndAt DateTime? @map("measurement_end_at")
   focusTargetId  BigInt @map("focus_target_id")
 
   createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
@@ -166,7 +167,7 @@ model DisabledFocusTargetTimeTable {
 model EnabledFocusTargetTimeTable {
   id    BigInt @id @default(autoincrement())
   measurementStartAt DateTime @map("measurement_start_at")
-  measurementEndAt DateTime @map("measurement_end_at")
+  measurementEndAt DateTime? @map("measurement_end_at")
   focusTargetId  BigInt? @map("focus_target_id")
 
   createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
@@ -177,3 +178,28 @@ model EnabledFocusTargetTimeTable {
 
   @@map("enabled_focus_target_time_table")
 } 
+
+model StatusTimeTable {
+  id    BigInt @id @default(autoincrement())
+  userId BigInt @map("user_id")
+  targetId BigInt @map("target_id")
+  timestamp DateTime 
+
+  createdAt DateTime @db.Timestamp(6) @default(now()) @map("created_at")
+  updatedAt DateTime? @db.Timestamp(6) @updatedAt @map("updated_at")
+  status Int @db.TinyInt @default(1)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("status_time_table")
+}
+
+model timerState {
+  id    BigInt @id @default(autoincrement())
+  userId BigInt @map("user_id")
+  startTime DateTime
+isRunning Boolean @default(true)
+
+  @@map("timer_state")
+
+}

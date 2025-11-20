@@ -47,6 +47,7 @@ authRouter.get(
   (req, res) => {
     // 로그인 성공 시 처리
     // res.redirect('/user/mypage'); // 온보딩 페이지로 리디렉션(예정)
-    res.redirect('http://localhost:3000/onboarding');
+    // res.redirect('https://ai-study-lens.p-e.kr/onboarding');
+    res.redirect('http://localhost:3000/onboarding')
   },
 );

@@ -6,10 +6,11 @@ export interface FocusTargetResponse {
 }
 
 export interface FocusTargetState {
+  userId: string;
   targetId: string;
   groupId: string[];
   timestamp: Date;
-  isInitial: Date;
+  isInitial: Date; 
 }
 
 export interface FocusTargetListResponse {
@@ -45,4 +46,12 @@ export interface DailyStatisticsResponse {
       endTime: Date;
     }[];
   };
+}
+
+export interface FocusTargetState {
+  // groupId: string[];
+  userId: string;
+  targetId: string;
+  timestamp: Date;
+  isInitial: Date;
 }
