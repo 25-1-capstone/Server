@@ -5,13 +5,13 @@ export interface FocusTargetResponse {
   status: number;
 }
 
-export interface FocusTargetState {
-  userId: string;
-  targetId: string;
-  groupId: string[];
-  timestamp: Date;
-  isInitial: Date; 
-}
+// export interface FocusTargetState {
+//   userId: string;
+//   targetId: string;
+//   groupId: string[];
+//   timestamp: Date;
+//   isInitial: Date; 
+// }
 
 export interface FocusTargetListResponse {
   targets: {
@@ -53,5 +53,5 @@ export interface FocusTargetState {
   userId: string;
   targetId: string;
   timestamp: Date;
-  isInitial: Date;
+  isInitial?: boolean;
 }
